@@ -46,9 +46,19 @@ if (process.env.CLIENT_URL) {
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Allow requests without an Origin header, such as server-to-server requests.
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.error("CORS blocked origin:", origin);
+      return callback(new Error("Origin not allowed by CORS"));
+    },
     credentials: true,
-  })
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
 );
 
 /* =========================
@@ -67,7 +77,7 @@ app.get("/", (req, res) => {
 app.post(
   "/api/stripe",
   express.raw({ type: "application/json" }),
-  stripeWebhooks
+  stripeWebhooks,
 );
 
 /* =========================
