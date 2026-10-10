@@ -38,11 +38,8 @@ const allowedOrigins = [
   "http://100.115.190.13:5173",
   "http://100.115.190.13:5174",
   "http://100.115.190.13:5175",
-];
-
-if (process.env.CLIENT_URL) {
-  allowedOrigins.push(process.env.CLIENT_URL);
-}
+  process.env.CLIENT_URL,
+].filter(Boolean); // Filter out any undefined values
 
 app.use(
   cors({
