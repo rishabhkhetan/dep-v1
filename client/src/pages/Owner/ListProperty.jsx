@@ -9,7 +9,7 @@ const ListProperty = () => {
   // Get Properties of the Agency Owner
   const getProperties = async () => {
     try {
-      const { data } = await axios.get("/api/properties/owner", {
+      const { data } = await axios.get("/api/properties/Owner", {
         headers: { Authorization: `Bearer ${await getToken()}` },
       });
 
