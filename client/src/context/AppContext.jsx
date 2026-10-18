@@ -4,7 +4,10 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios"
 import toast from "react-hot-toast"
 
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
+const backendBaseUrl = (import.meta.env.VITE_BACKEND_URL || "").trim().replace(/\/+$/, "");
+if (backendBaseUrl) {
+  axios.defaults.baseURL = backendBaseUrl;
+}
 
 const AppContext = createContext();
 

@@ -74,8 +74,9 @@ const FeedbackPage = () => {
     });
 
     try {
-      const backend =
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+      const backend = (
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
+      ).trim().replace(/\/+$/, "");
 
       const apiBase = backend.endsWith("/api")
         ? backend

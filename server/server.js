@@ -31,6 +31,11 @@ const app = express();
    CORS
 ========================= */
 
+const configuredOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((url) => url.trim().replace(/\/+$/, ""))
+  .filter(Boolean);
+
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
@@ -38,14 +43,24 @@ const allowedOrigins = [
   "http://100.115.190.13:5173",
   "http://100.115.190.13:5174",
   "http://100.115.190.13:5175",
-  process.env.CLIENT_URL,
-].filter(Boolean); // Filter out any undefined values
+  ...configuredOrigins,
+];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests without an Origin header, such as server-to-server requests.
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests without an Origin header (such as server-to-server, curl, Postman)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const normalizedOrigin = origin.replace(/\/+$/, "");
+
+      // Allow matching origins or any Vercel preview/production app
+      if (
+        allowedOrigins.includes(normalizedOrigin) ||
+        normalizedOrigin.endsWith(".vercel.app")
+      ) {
         return callback(null, true);
       }
 
@@ -82,6 +97,27 @@ app.post(
 ========================= */
 
 app.use(express.json());
+
+/* =========================
+   DATABASE ASSURANCE (SERVERLESS)
+========================= */
+
+app.use(async (req, res, next) => {
+  if (req.path === "/") {
+    return next();
+  }
+
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("Database connection error in request:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Database connection failed",
+    });
+  }
+});
 
 /* =========================
    CLERK MIDDLEWARE
