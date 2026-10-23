@@ -84,7 +84,7 @@ const Header = () => {
           {/* Navbar */}
           <Navbar
             setMenuOpened={setMenuOpened}
-            containerStyles={`hidden lg:flex lg:-translate-x-12 gap-x-5 xl:gap-x-1 medium-15 p-1 ${!active ? "text-white" : ""}`}
+            containerStyles={`hidden lg:flex items-center gap-x-3 xl:gap-x-4 medium-15 p-1 ${!active ? "text-white" : ""}`}
           />
           {/* Buttons & Profile */}
           <div className="flex sm:flex-1 items-center sm:justify-end gap-x-4 sm:gap-x-8 xl:gap-x-4">

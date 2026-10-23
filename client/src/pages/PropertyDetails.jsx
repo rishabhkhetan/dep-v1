@@ -21,6 +21,7 @@ import {
   CalendarClock,
   ChevronRight,
   ShieldCheck,
+  MessageCircle,
 } from "lucide-react";
 
 /**
@@ -53,7 +54,7 @@ function amenityIcon(name = "") {
 }
 
 const PropertyDetails = () => {
-  const { navigate, properties, axios, getToken, user } = useAppContext();
+  const { navigate, properties, axios, getToken, user, formatPrice, currency } = useAppContext();
   const location = useLocation();
   const { openSignIn } = useClerk();
   const [property, setProperty] = useState(null);
@@ -154,7 +155,14 @@ const PropertyDetails = () => {
   }
 
   const price = property.price?.sale ?? property.price?.rent ?? "N/A";
-  const priceLabel = property.price?.sale ? "Sale Price" : property.price?.rent ? "Monthly Rent" : "Price";
+  const priceLabel = property.price?.sale ? "Sale Price" : property.price?.rent ? "Rent" : "Price";
+
+  const propertyAddress = [property.address, property.locality, property.city]
+    .filter(Boolean)
+    .join(", ") || property.locality || property.city || "Kolkata";
+  const whatsappMessage = `I'm interested in ${property.title || "this property"}\n${propertyAddress}`;
+  const whatsappUrl = `https://wa.me/919258020736?text=${encodeURIComponent(whatsappMessage)}`;
+  const agencyPhone = "9258020736";
 
   // Time slot options (hard-coded for demo)
   const timeSlots = [
@@ -219,10 +227,7 @@ const PropertyDetails = () => {
               <div className="bg-white rounded-xl ring-1 ring-slate-900/5 p-5">
                 <p className="text-sm text-gray-500">{priceLabel}</p>
                 <p className="text-3xl font-bold text-amber-600 mt-0.5">
-                  {price !== "N/A" ? `₹${Number(price).toLocaleString("en-IN")}` : "Contact for price"}
-                  {property.price?.rent && !property.price?.sale && (
-                    <span className="text-base font-medium text-gray-500">/mo</span>
-                  )}
+                  {price !== "N/A" ? formatPrice(price, currency || "₹") : "Contact for price"}
                 </p>
 
                 {stats.length > 0 && (
@@ -283,28 +288,26 @@ const PropertyDetails = () => {
                 )}
               </div>
 
-              {/* Contact / Enquiry */}
-<div className="flex gap-3">
-  <a
-    href={
-      property.broker?.email
-        ? `mailto:${property.broker.email}`
-        : undefined
-    }
-    className="flex-1 flex items-center justify-center gap-2 bg-white border border-amber-300 text-amber-700 font-semibold px-4 py-3 rounded-xl hover:bg-amber-50 hover:border-amber-400 transition-colors text-sm"
-  >
-    <Mail size={16} />
-    Contact Agent
-  </a>
+              {/* WhatsApp Now & Call Now */}
+              <div className="flex gap-3">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold px-4 py-3 rounded-xl transition-all duration-200 shadow-sm text-sm active:scale-[0.98]"
+                >
+                  <MessageCircle size={18} className="fill-white stroke-[#25D366]" />
+                  <span>WhatsApp Now</span>
+                </a>
 
-  <button
-    onClick={() => toast("Enquiry flow not implemented in demo.")}
-    className="flex-1 flex items-center justify-center gap-2 bg-amber-600 text-white font-semibold px-4 py-3 rounded-xl hover:bg-amber-700 transition-colors text-sm"
-  >
-    <Phone size={16} />
-    Enquiry
-  </button>
-</div>
+                <a
+                  href={`tel:${agencyPhone}`}
+                  className="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-3 rounded-xl transition-colors text-sm shadow-sm active:scale-[0.98]"
+                >
+                  <Phone size={18} />
+                  <span>Call Now</span>
+                </a>
+              </div>
             </div>
           </div>
 

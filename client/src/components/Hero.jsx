@@ -108,15 +108,8 @@ const Hero = () => {
         <div className="relative flex justify-end mx-auto flex-col gap-4 h-full py-6 sm:pt-18">
 
           {/* Hero Text */}
-          <div className="flex flex-col mt-12 text-white">
-            {/* <button className="max-w-80 flex items-center space-x-3 border border-white medium-13 rounded-full px-4 pr-0.5 py-1 cursor-pointer">
-              <span>Premium Properties in Kolkata</span>
-              <span className="flexCenter size-6 p-1 rounded-full bg-white">
-                <img src={assets.right} alt="rightIcon" width={20} />
-              </span>
-            </button> */}
-
-            <h2 className="h2 capitalize leading-tight mt-3 my-2 text-white">
+          <div className="flex flex-col mt-12 text-white text-center items-center">
+            <h2 className="h2 capitalize leading-tight mt-3 my-2 text-white text-center">
               Find Your{" "}
               <span className="bg-gradient-to-r from-secondary to-white bg-clip-text text-transparent">
                 Dream Home
@@ -126,17 +119,17 @@ const Hero = () => {
           </div>
 
           {/* REAL ESTATE SEARCH */}
-          <div className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-5xl">
+          <div className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-5xl w-full mx-auto">
             {/* Purpose Tabs */}
-            <div className="flex border-b border-gray-100">
+            <div className="flex w-full border-b border-gray-100">
               {PURPOSE_TABS.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActivePurpose(tab)}
-                  className={`px-4 py-3 text-sm font-semibold transition-colors ${
+                  className={`flex-1 py-3.5 text-center text-sm md:text-base font-semibold transition-all duration-200 ${
                     activePurpose === tab
-                      ? "text-amber-600 border-b-2 border-amber-500 bg-amber-50"
-                      : "text-gray-500 hover:text-gray-800"
+                      ? "text-amber-600 border-b-2 border-amber-500 bg-amber-50/70"
+                      : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
                   }`}
                 >
                   {tab}
@@ -240,17 +233,25 @@ const Hero = () => {
             </form>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-wrap gap-2 pb-6">
-            {["New Town", "Alipore", "Salt Lake", "Tollygunge", "Rajarhat", "Ballygunge"].map((loc) => (
-              <button
-                key={loc}
-                onClick={() => navigate(`/listing?locality=${loc}`)}
-                className="text-xs text-white/80 border border-white/30 rounded-full px-3 py-1 hover:bg-white/10 transition-colors"
-              >
-                {loc}
-              </button>
-            ))}
+          {/* Trending Localities Quick Links */}
+          <div className="flex flex-col items-center justify-center gap-2 pb-6 w-full max-w-5xl mx-auto">
+            <span className="text-xs md:text-sm font-semibold tracking-wider uppercase text-amber-300 drop-shadow-md">
+              Trending Localities
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5">
+              {["New Town", "Alipore", "Salt Lake", "Tollygunge", "Rajarhat", "Ballygunge"].map((loc) => (
+                <button
+                  key={loc}
+                  onClick={() => navigate(`/listing?locality=${loc}`)}
+                  className="group relative overflow-hidden text-sm md:text-base font-medium text-white/95 bg-white/10 backdrop-blur-md border border-white/30 rounded-full px-5 py-1.5 shadow-md transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-amber-500 hover:to-amber-600 hover:text-white hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/30 active:scale-95"
+                >
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 group-hover:bg-white transition-colors"></span>
+                    {loc}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

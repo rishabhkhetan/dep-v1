@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios"
 import toast from "react-hot-toast"
+import { formatPrice, formatPriceShort } from "../utils/formatPrice";
 
 const backendBaseUrl = (import.meta.env.VITE_BACKEND_URL || "").trim().replace(/\/+$/, "");
 if (backendBaseUrl) {
@@ -12,7 +13,7 @@ if (backendBaseUrl) {
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const currency = import.meta.env.VITE_CURRENCY
+  const currency = import.meta.env.VITE_CURRENCY || "₹";
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
   const [searchedCities, setSearchedCities] = useState([])
@@ -77,6 +78,8 @@ export const AppContextProvider = ({ children }) => {
     propertiesLoading,
     propertiesError,
     currency,
+    formatPrice,
+    formatPriceShort,
     user,
     isOwner,
     setIsOwner,
@@ -91,4 +94,5 @@ export const AppContextProvider = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const useAppContext = () => useContext(AppContext);
+export const useAppContext = () => useContext(AppContext);
+export { formatPrice, formatPriceShort };

@@ -10,6 +10,7 @@ import PropertyDetails from './pages/PropertyDetails'
 import MyBookings from './pages/MyBookings'
 import FaqPage from './pages/FaqPage'
 import FeedbackPage from './pages/FeedbackPage'
+import Offers from './pages/Offers'
 import { useAppContext } from './context/AppContext'
 import Sidebar from './components/owner/Sidebar'
 import Dashboard from './pages/Owner/Dashboard'
@@ -17,6 +18,7 @@ import AddProperty from './pages/Owner/AddProperty'
 import ListProperty from './pages/Owner/ListProperty'
 import { Toaster } from "react-hot-toast"
 import Processing from './pages/Processing'
+import FloatingWhatsApp from './components/FloatingWhatsApp'
 
 const App = () => {
   const location = useLocation()
@@ -32,6 +34,7 @@ const App = () => {
         <Route path='/listing/:id' element={<PropertyDetails />}/>
         <Route path='/blog' element={<Blog />}/>
         <Route path='/contact' element={<Contact />}/>
+        <Route path='/offers' element={<Offers />}/>
         <Route path='/my-bookings' element={<MyBookings />}/>
         <Route path='/faq' element={<FaqPage />}/>
         <Route path='/feedback' element={<FeedbackPage />}/>
@@ -43,6 +46,7 @@ const App = () => {
         </Route>
       </Routes>
       {!isOwnerPath && <Footer />}
+      <FloatingWhatsApp />
     </main>
   )
 }

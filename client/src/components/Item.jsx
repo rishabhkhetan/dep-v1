@@ -2,10 +2,18 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { assets } from '../assets/data'
 import { useAppContext } from '../context/AppContext'
+import { MessageCircle } from 'lucide-react'
 
-const Item = ({property}) => {
-  const {currency} = useAppContext()
-  const agencyPhone = property.agency?.contact
+const Item = ({property, tag}) => {
+  const {currency, formatPrice} = useAppContext()
+  const agencyPhone = "9258020736"
+
+  const propertyAddress = [property.address, property.locality, property.city]
+    .filter(Boolean)
+    .join(', ') || property.locality || property.city || 'Kolkata'
+
+  const whatsappMessage = `I'm interested in ${property.title || 'this property'}\n${propertyAddress}`
+  const whatsappUrl = `https://wa.me/919258020736?text=${encodeURIComponent(whatsappMessage)}`
   
   return (
     <div className='group relative overflow-hidden rounded-lg bg-white ring-1 ring-slate-900/5 transition-transform duration-300 hover:z-10 hover:scale-[1.04] focus-within:z-10 focus-within:scale-[1.04]'>
@@ -18,18 +26,18 @@ const Item = ({property}) => {
             alt={property.title}
             className='h-[13rem] w-full aspect-square object-cover rounded-t-xl'
           />
+          {tag && (
+            <div className="absolute top-0 right-0 w-1/3 bg-purple-700 text-white font-bold text-[11px] sm:text-xs py-1.5 px-1 text-center rounded-bl-lg shadow-md z-10 uppercase tracking-wide">
+              {tag}
+            </div>
+          )}
         </div>
         {/* Info */}
         <div className="p-3">
           <div className="flexBetween">
               <h5 className="bold-16 my-1">{property.propertyType || "Apartment"}</h5>
               <div className='bold-15 text-secondary'>
-                {currency}{Number(property.price?.sale || property.price || 0).toLocaleString()}
-                {property.price?.rent && (
-                  <span className='text-xs font-normal text-slate-500 ml-1'>
-                    | {currency}{Number(property.price.rent).toLocaleString()}/mo
-                  </span>
-                )}
+                {formatPrice(property.price?.sale || property.price?.rent || property.price || 0, currency)}
               </div>
           </div>
           <h4 className='h4 line-clamp-1'>{property.title}</h4>
@@ -56,20 +64,20 @@ const Item = ({property}) => {
       </Link>
       <div className='grid grid-rows-[0fr] px-3 transition-[grid-template-rows] duration-200 group-hover:grid-rows-[1fr] group-focus-within:grid-rows-[1fr]'>
         <div className='min-h-0 overflow-hidden'>
-          <div className='mb-3 flex gap-2'>
-            <Link
-              to={'/listing/' + property._id}
-              className='group/explore relative flex h-10 flex-1 items-center justify-center overflow-hidden rounded-full bg-[#d99a35] px-10 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#c88624]'
-            >
-              Explore
-              <span className='absolute left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#d99a35] transition-all duration-500 group-hover/explore:left-[calc(100%-2.25rem)]'>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className='h-4 w-4'>
-                  <path d="M5 12h14" />
-                  <path d="m13 6 6 6-6 6" />
-                </svg>
-              </span>
-            </Link>
-            {agencyPhone && (
+          <div className='mb-3 flex flex-col gap-2'>
+            <div className='flex gap-2'>
+              <Link
+                to={'/listing/' + property._id}
+                className='group/explore relative flex h-10 flex-1 items-center justify-center overflow-hidden rounded-full bg-[#d99a35] px-10 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#c88624]'
+              >
+                Explore
+                <span className='absolute left-1 flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#d99a35] transition-all duration-500 group-hover/explore:left-[calc(100%-2.25rem)]'>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className='h-4 w-4'>
+                    <path d="M5 12h14" />
+                    <path d="m13 6 6 6-6 6" />
+                  </svg>
+                </span>
+              </Link>
               <a
                 href={`tel:${agencyPhone}`}
                 className='flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-[#d99a35] px-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#c88624]'
@@ -79,7 +87,18 @@ const Item = ({property}) => {
                   <img src={assets.phone} alt="" className='h-3.5 w-3.5' />
                 </span>
               </a>
-            )}
+            </div>
+
+            {/* WhatsApp Now Full-Width Button */}
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className='flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-sm font-bold text-white shadow-sm transition-all duration-200 active:scale-[0.98]'
+            >
+              <MessageCircle className='h-4 w-4 fill-white stroke-[#25D366]' />
+              <span>WhatsApp Now</span>
+            </a>
           </div>
         </div>
       </div>

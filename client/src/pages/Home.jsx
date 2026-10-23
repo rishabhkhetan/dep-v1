@@ -1,5 +1,6 @@
 import React from 'react'
 import Hero from '../components/Hero'
+import KolkataLocalities from '../components/KolkataLocalities'
 import About from '../components/About'
 import FeaturedProperties from '../components/FeaturedProperties'
 import Faq from '../components/Faq'
@@ -10,6 +11,7 @@ const Home = () => {
   return (
     <div className='bg-gradient-to-r from-[#fffbee] to-white'>
       <Hero />
+      <KolkataLocalities />
       <About />
       <FeaturedProperties />
       <Faq />

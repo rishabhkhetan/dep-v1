@@ -3,7 +3,7 @@ import { useAppContext } from "../../context/AppContext";
 import { assets, dummyDashboardData } from "../../assets/data";
 
 const Dashboard = () => {
-  const { user, currency, axios, getToken } = useAppContext();
+  const { user, currency, axios, getToken, formatPrice } = useAppContext();
   const [dashboardData, setDashboarData] = useState({
     bookings: [],
     totalBookings: 0,
@@ -48,8 +48,7 @@ const Dashboard = () => {
           <img src={assets.dollar} alt="" className="hidden sm:flex w-8" />
           <div>
             <h4 className="h4">
-              {currency}
-              {dashboardData?.totalRevenue || 0}
+              {formatPrice(dashboardData?.totalRevenue || 0, currency)}
             </h4>
             <h5 className="h5 text-secondary">Total Earnings</h5>
           </div>
@@ -87,8 +86,7 @@ const Dashboard = () => {
                 {new Date(booking.checkOutDate).toLocaleDateString()}
               </div>
               <div>
-                {currency}
-                {booking.totalPrice}
+                {formatPrice(booking.totalPrice, currency)}
               </div>
               <button
                 className={`${

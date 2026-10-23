@@ -3,7 +3,7 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 const ListProperty = () => {
-  const { axios, getToken, user, currency } = useAppContext();
+  const { axios, getToken, user, currency, formatPrice } = useAppContext();
   const [properties, setProperties] = useState([]);
 
   // Get Properties of the Agency Owner
@@ -74,8 +74,7 @@ const ListProperty = () => {
               </div>
               <div className="line-clamp-2">{property.address}</div>
               <div>
-                {currency}
-                {property.price.sale}
+                {formatPrice(property.price?.sale || property.price, currency)}
               </div>
               <div>
                 <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
